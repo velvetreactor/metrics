@@ -1,0 +1,21 @@
+services:
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ${PATH_TO_NAS_PROMSTACK}/prometheus/prometheus.yml/:/etc/prometheus/prometheus.yml
+      - ${PATH_TO_NAS_PROMSTACK}/prometheus/prometheus/:/prometheus
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 9091:3000
+    volumes:
+      - ${PATH_TO_NAS_PROMSTACK}/grafana/grafana/:/var/lib/grafana
+  metrics-server:
+    image: velvetreactor/metrics:0.1
+    ports:
+      - 8080:8080
+    environment:
+      - MY_BUDGET_ID=${MY_BUDGET_ID}
+      - YNAB_TOKEN=${YNAB_TOKEN}
