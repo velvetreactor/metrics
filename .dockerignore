@@ -1,5 +1,6 @@
 fixtures/
 .envrc
+.env.sample
 .gitignore
 docker-compose.yml
 Dockerfile
