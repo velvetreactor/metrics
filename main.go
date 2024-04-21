@@ -139,7 +139,7 @@ func (l LineItem) GetBudgeted() float64 {
 }
 
 func (l LineItem) GetUsed() float64 {
-	return float64(l.Activity)
+	return -(float64(l.Activity) / 1000)
 }
 
 func main() {
