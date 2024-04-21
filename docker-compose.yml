@@ -1,4 +1,13 @@
 services:
+  postgres:
+    image: postgres:16.2-alpine
+    ports:
+      - 9093:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    volumes:
+      - ${PWD}/data/postgres:/var/lib/postgresql/data
   prometheus:
     image: prom/prometheus
     ports:

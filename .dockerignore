@@ -4,3 +4,6 @@ fixtures/
 .gitignore
 docker-compose.yml
 Dockerfile
+data/
+infra/
+.DS_Store

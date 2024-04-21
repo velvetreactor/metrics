@@ -1,2 +1,5 @@
 .envrc
 fixtures/
+data/
+infra/
+.DS_Store

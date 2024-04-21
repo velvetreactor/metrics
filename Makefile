@@ -9,4 +9,10 @@ git-tag-next:
 	@git tag $(VERSION)
 	@git push --tags
 
-.PHONY: all build-metrics-server release git-tag-next
+migrate-create:
+	@migrate create -ext sql -dir migrations $(NAME)
+
+migrate:
+	@migrate -database $(DATABASE_URL) -path ./migrations up
+
+.PHONY: all build-metrics-server release git-tag-next migrate migrate-create
