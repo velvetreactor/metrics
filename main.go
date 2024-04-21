@@ -129,9 +129,9 @@ type LineItem struct {
 	// Category
 	Name      string `json:"name"`
 	Budgeted  int    `json:"budgeted"`
-	Remaining int    `json:"goal_overall_left"`
 	Hidden    bool   `json:"hidden"`
 	GroupName string `json:"category_group_name"`
+	Activity  int    `json:"activity"`
 }
 
 func (l LineItem) GetBudgeted() float64 {
@@ -139,7 +139,7 @@ func (l LineItem) GetBudgeted() float64 {
 }
 
 func (l LineItem) GetUsed() float64 {
-	return (float64(l.Budgeted) - float64(l.Remaining)) / 1000
+	return float64(l.Activity)
 }
 
 func main() {
