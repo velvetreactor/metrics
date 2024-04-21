@@ -1,4 +1,4 @@
-VERSION := 0.2
+VERSION := 0.3
 
 release: build-metrics-server
 	@docker image tag velvetreactor/metrics:$(VERSION) velvetreactor/metrics:latest
