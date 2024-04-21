@@ -150,7 +150,7 @@ func main() {
 
 	http.Handle("/ynab/metrics", promhttp.HandlerFor(hourlyRegistry, promhttp.HandlerOpts{}))
 
-	fmt.Println("Server starting on port 8080...")
+	fmt.Println("Server starting...")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
 	}
