@@ -13,7 +13,7 @@ services:
     volumes:
       - ${PATH_TO_NAS_PROMSTACK}/grafana/grafana/:/var/lib/grafana
   metrics-server:
-    image: velvetreactor/metrics:0.1
+    image: velvetreactor/metrics:latest
     ports:
       - 8080:8080
     environment:
