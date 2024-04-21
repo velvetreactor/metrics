@@ -1,9 +1,10 @@
-VERSION := 0.3
+VERSION := 0.4
 
 release: build-metrics-server
-	@docker image tag velvetreactor/metrics:$(VERSION) velvetreactor/metrics:latest
+	@docker image tag ghcr.io/velvetreactor/metrics:$(VERSION) ghcr.io/velvetreactor/metrics:latest
+	@docker image push --all-tags ghcr.io/velvetreactor/metrics
 
 build-metrics-server:
-	@docker build -t velvetreactor/metrics:$(VERSION) .
+	@docker buildx build --platform linux/amd64 -t ghcr.io/velvetreactor/metrics:$(VERSION) .
 
 .PHONY: all build-metrics-server
