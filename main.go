@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -25,7 +26,29 @@ func main() {
 
 	r.Route("/notes", func(r chi.Router) {
 		r.Get("/new", func(w http.ResponseWriter, r *http.Request) {
-			w.Write([]byte("/notes/new"))
+			file, err := os.ReadFile("views/add_note.html")
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
+			data := struct {
+				Title    string
+				Header   string
+				Contents template.HTML
+			}{
+				Title:    "Add note",
+				Header:   "Add note",
+				Contents: template.HTML(file),
+			}
+
+			tmpl, err := template.ParseFiles("views/layout.html")
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
+
+			err = tmpl.Execute(w, data)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
 		})
 	})
 
