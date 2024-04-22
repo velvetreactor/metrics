@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/velvetreactor/metrics/pkg/ynabcollector"
@@ -17,26 +18,26 @@ func main() {
 	ynabCollector := &ynabcollector.YNABCollector{}
 	hourlyRegistry.MustRegister(ynabCollector)
 
-	// Metrics
-	http.Handle("/ynab/metrics", promhttp.HandlerFor(hourlyRegistry, promhttp.HandlerOpts{}))
+	r := chi.NewRouter()
 
-	// Pages
-	http.HandleFunc("/transactions/new", func(w http.ResponseWriter, req *http.Request) {
-		data, err := os.ReadFile("views/add_transaction.html")
-		if err != nil {
-			log.Printf("Error reading file: %s", err)
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			return
-		}
-
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-
-		w.Write(data)
+	r.Route("/transactions", func(r chi.Router) {
 	})
+
+	r.Route("/notes", func(r chi.Router) {
+	})
+
+	// Metrics
+	r.Get(
+		"/ynab/metrics",
+		promhttp.HandlerFor(
+			hourlyRegistry,
+			promhttp.HandlerOpts{},
+		).(http.HandlerFunc),
+	)
 
 	port := os.Getenv("METRICS_SERVER_PORT")
 	fmt.Printf("Server starting on port %s...\n", port)
-	if err := http.ListenAndServe(fmt.Sprintf(":%s", port), nil); err != nil {
+	if err := http.ListenAndServe(fmt.Sprintf(":%s", port), r); err != nil {
 		log.Fatal(err)
 	}
 }
