@@ -25,6 +25,7 @@ func main() {
 
 	r.Route("/notes", func(r chi.Router) {
 		r.Get("/new", func(w http.ResponseWriter, r *http.Request) {
+			w.Write([]byte("/notes/new"))
 		})
 	})
 
