@@ -25,6 +25,9 @@ func main() {
 	})
 
 	r.Route("/notes", func(r chi.Router) {
+		r.Post("/", func(w http.ResponseWriter, r *http.Request) {
+		})
+
 		r.Get("/new", func(w http.ResponseWriter, r *http.Request) {
 			file, err := os.ReadFile("views/add_note.html")
 			if err != nil {
