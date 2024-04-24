@@ -3,10 +3,10 @@ package web_test
 import (
 	"context"
 	"net/http"
+	"net/url"
 	"testing"
 
 	"github.com/jackc/pgx/v5/pgconn"
-	_assert "github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/velvetreactor/metrics/pkg/web"
 )
@@ -23,7 +23,7 @@ func (m *mockDbConn) Exec(
 	return args.Get(0).(pgconn.CommandTag), args.Error(1)
 }
 
-func (m *mockDbConn) Close(ctx context.Context) error {
+func (m *mockDbConn) Close(_ context.Context) error {
 	args := m.Called()
 
 	return args.Error(0)
@@ -48,12 +48,34 @@ func (m *mockResponseWriter) WriteHeader(statusCode int) {
 }
 
 func TestCreateNote(t *testing.T) {
-	assert := _assert.New(t)
+	//assert := _assert.New(t)
 
 	mdc := new(mockDbConn)
 	mrw := new(mockResponseWriter)
 
-	web := web.NewWith(&web.Args{Db: mdc})
+	req := &http.Request{
+		Form: url.Values{
+			"body": []string{
+				"asdfasdf",
+			},
+		},
+		PostForm: url.Values{
+			"body": []string{
+				"asdfasdf",
+			},
+		},
+	}
 
-	web.CreateNote(mrw, &http.Request{})
+	mdc.On(
+		"Exec",
+		"INSERT INTO notes (body) VALUES ($1)",
+		[]interface{}{"asdfasdf"},
+	).Return(pgconn.NewCommandTag("INSERT 0 1"), nil)
+	mdc.On("Close").Return(nil)
+
+	web := web.NewWith(&web.Args{Db: mdc})
+	web.CreateNote(mrw, req)
+
+	mdc.AssertExpectations(t)
+	mrw.AssertExpectations(t)
 }
