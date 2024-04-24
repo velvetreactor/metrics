@@ -5,5 +5,8 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o metrics_server .
 
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
+
 COPY --from=builder /app/metrics_server /metrics_server
+COPY ./views /views
+
 CMD ["/metrics_server"]
